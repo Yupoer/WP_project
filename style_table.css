@@ -1,0 +1,223 @@
+@import url("https://fonts.googleapis.com/earlyaccess/cwtexyen.css");
+
+body {
+    background-color: #EAE0D7;
+    margin: 0;
+}
+/*****************************學年***********************************/
+.semester{
+    display: flex;
+    width: 50vw;
+    height: 15vh;
+    position: absolute;
+    margin-left: 35px;
+    margin-top: 20px;
+    right: 31%;
+
+}
+
+.year{
+
+}
+
+/*****************************學分分類***********************************/
+.typesetting {
+    position: absolute;
+    float: right;
+    width: 50vw;
+    height: 20vh;
+    right: 20px;
+}
+
+.group {
+    position: relative;
+    float: right;
+    width: 100%;
+    height: 85%;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.credit {
+    float: right;
+    margin-left: 80px;
+    height: 100%;
+    width: 17vh;
+    text-align: center;
+    font-family: 'cwTeXYen';
+    font-size: 30px;
+    cursor: pointer;
+    background-color: #C3AAA6;
+}
+/****************************************************************/
+
+table {
+    border-collapse: collapse;
+    font-family: 'cwTeXYen';
+}
+/**************資料庫********************/
+.database{
+    overflow: auto;
+    margin: 20px;
+    height: 70vh;
+    width: 20vw;
+}
+
+/**************課表********************/
+
+.wrapper {
+    position: absolute;
+    float: left;
+    bottom: 0px;
+    right: 20px;
+    background-color: #ddd0c8;
+    width: 75vw;
+    height: 70vh;
+    padding: 0;
+    margin: 20px;
+    white-space: nowrap;
+}
+
+.arrows {
+    width: 10%;
+    height: 70vh;
+    line-height: 70vh;
+    text-align: center;
+    overflow: hidden;
+    float: left;
+}
+
+.arrow {
+    cursor: pointer;
+    border: 0;
+    width: 100%;
+    height: 70vh;
+    font-weight: bolder;
+    font-size: 40px;
+    color: #A08887;
+    background-color: #ddd0c8;
+}
+
+
+
+::-webkit-scrollbar-track-piece {
+    background: transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.row1 {
+    background-color: #C7A9A1;
+}
+
+.club {
+    position: relative;
+    box-sizing: border-box;
+    height: 90px;
+    width: calc(75vw*0.8/8);
+    text-align: center;
+}
+
+.field {
+    font-size: 40px;
+    color: #D3BBB7;
+}
+
+.subfield {
+    height: 100px;
+    width: 100px;
+    border: 3px;
+    border-style: solid;
+    border-color: #D3BBB7;
+    color: #8D6B61;
+    float: left;
+    margin: 20px;
+    font-size: 30px;
+}
+
+.requiredclass {
+    font-size: 40px;
+    color: #8D6B61;
+    line-height: 150px;
+}
+
+.optionalclass {
+    font-size: 40px;
+    color: #8D6B61;
+    line-height: 150px;
+}
+
+.cross {
+    position: relative;
+    top: -100px;
+    left: 420px;
+    cursor: pointer;
+    font-size: 30px;
+    color: #9297AB;
+}
+
+.grouppop {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.popup {
+    box-sizing: border-box;
+    background-color: #E6DEDC;
+    border: 3px;
+    border-style: solid;
+    border-color: #D3BBB7;
+    padding-left: 150px;
+    padding-right: 150px;
+    display: none;
+    width: 900px;
+    height: 450px;
+    text-align: center;
+    font-family: 'cwTeXYen';
+}
+
+.type {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+
+.strip {
+    padding: 0;
+    margin: 0;
+    float: left;
+    height: 100%;
+    width: 100%;
+    overflow: hidden auto;
+    white-space: nowrap;
+}
+
+.numWrap {
+    float: left;
+    height: 100%;
+    width: 80%;
+    overflow: hidden;
+}
+
+.tableclass {
+    display: inline-block;
+    width: calc(75vw*0.8);
+    height: 100%;
+}
