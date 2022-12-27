@@ -4,72 +4,167 @@ body {
     background-color: #EAE0D7;
     margin: 0;
 }
-/*****************************學年***********************************/
-.semester{
-    display: flex;
-    width: 50vw;
-    height: 15vh;
-    position: absolute;
-    margin-left: 35px;
-    margin-top: 20px;
-    right: 31%;
 
+.up {
+    position: absolute;
+    width: 100%;
 }
 
-.year{
-
+.logd {
+    position: relative;
+    bottom: 0px;
 }
 
-/*****************************學分分類***********************************/
-.typesetting {
-    position: absolute;
+.logout {
+    position: relative;
     float: right;
-    width: 50vw;
+    width: 50%;
+    background-color: #E0DFE4;
+    border-color: #BDC4CC;
+}
+
+
+/*****************************個人資料***********************************/
+.card {
+    width: 10vw;
     height: 20vh;
+    background-color: #D0DCDD;
+}
+
+
+/*****************************學年***********************************/
+.semester {
+    width: 40vw;
+    height: 25vh;
+    position: relative;
+    left: 5px;
+}
+
+.sem_in {
+    right: 0px;
+    width: 100%;
+    height: 40%;
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+
+
+/***************************學分分類*********************************/
+.typesetting {
+    position: relative;
+    float: right;
+    width: 45vw;
+    height: 25vh;
     right: 20px;
 }
 
 .group {
     position: relative;
-    float: right;
     width: 100%;
-    height: 85%;
+    height: 75%;
     top: 50%;
-    transform: translate(0, -50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .credit {
-    float: right;
-    margin-left: 80px;
-    height: 100%;
-    width: 17vh;
+    float: left;
+    margin-left: 2vw;
+    height: 9vw;
+    width: 9vw;
     text-align: center;
     font-family: 'cwTeXYen';
     font-size: 30px;
     cursor: pointer;
     background-color: #C3AAA6;
 }
+
 /****************************************************************/
 
 table {
     border-collapse: collapse;
     font-family: 'cwTeXYen';
 }
-/**************資料庫********************/
-.database{
-    overflow: auto;
-    margin: 20px;
-    height: 70vh;
-    width: 20vw;
+
+/****************資料庫********************/
+select {
+    background-color: #DFF7E6;
+    border-color: #D2D2D0;
+    width: 30%;
 }
 
-/**************課表********************/
+.search {
+    position: relative;
+    width: 65%;
+    height: 20px;
+}
+
+#clear {
+    position: relative;
+    width: 150px;
+    background-color: #E0DFE4;
+    border-color: #A8B2AA;
+    font-family: 'cwTeXYen'
+}
+
+.seardiv {
+    float: left;
+    position: relative;
+    right: 0px;
+}
+
+.searword {
+    background-color: #DFF7E6;
+}
+
+.database {
+    overflow: auto auto;
+    position: relative;
+    bottom: 0px;
+    margin: 20px;
+    height: 90%;
+    width: 100%;
+}
+
+.data-in {
+    position: relative;
+    width: 100%;
+    left: 50%;
+    bottom: 0px;
+    transform: translate(-50%, 0%);
+}
+
+.lefbot {
+    font-family: 'cwTeXYen';
+    position: absolute;
+    width: 20vw;
+    height: 75vh;
+    bottom: 15px;
+}
+
+.lefbot_in {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.selgroup {
+    position: relative;
+    height: 10%;
+    width: 100%;
+    left: 10px;
+    float: left;
+}
+
+/***************課表********************/
 
 .wrapper {
     position: absolute;
     float: left;
     bottom: 0px;
-    right: 20px;
+    right: 10px;
     background-color: #ddd0c8;
     width: 75vw;
     height: 70vh;
@@ -98,13 +193,16 @@ table {
     background-color: #ddd0c8;
 }
 
-
+::-webkit-scrollbar-corner {
+    background-color: #EAE0D7;
+}
 
 ::-webkit-scrollbar-track-piece {
     background: transparent;
 }
 
 ::-webkit-scrollbar {
+    height: 10px;
     width: 10px;
 }
 
@@ -147,9 +245,8 @@ table {
 }
 
 .requiredclass {
-    font-size: 40px;
+    font-size: 25px;
     color: #8D6B61;
-    line-height: 150px;
 }
 
 .optionalclass {
@@ -160,8 +257,8 @@ table {
 
 .cross {
     position: relative;
-    top: -100px;
-    left: 420px;
+    top: -50px;
+    right: -400px;
     cursor: pointer;
     font-size: 30px;
     color: #9297AB;
@@ -185,7 +282,7 @@ table {
     padding-right: 150px;
     display: none;
     width: 900px;
-    height: 450px;
+    height: 500px;
     text-align: center;
     font-family: 'cwTeXYen';
 }
