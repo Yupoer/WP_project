@@ -21,31 +21,6 @@
         let gent = ["微積分", "數位邏輯", "數位邏輯實驗", "線性代數", "演算法", "電腦網路", "普通物理", "計算機組織學", "機率論", "程式設計", "計算機概論", "資料結構", "作業系統", "離散數學", "程式設計(二)", "資訊專題討論", "英文(大一英文)", "國文（上）（國文領域）", "國文（下）（國文領域）", "海洋科學概論"]
         let tablewidth = 1;
         let place = 1
-        ////////////////////////////////////////////////學分彈出視窗/////////////////////////////////////////////////////////////////////////////////////////////
-        $(function () {
-            $("#required").click(function () {
-                if (now)
-                    $("#" + now).hide()
-                $("#requiredcourse").fadeIn('slow')
-                now = 'requiredcourse'
-            });
-            $("#optional").click(function () {
-                if (now)
-                    $("#" + now).hide()
-                $("#optionalcourse").fadeIn('slow')
-                now = 'optionalcourse'
-            });
-            $("#general").click(function () {
-                if (now)
-                    $("#" + now).hide()
-                $("#generalcourse").fadeIn('slow')
-                now = 'generalcourse'
-            });
-            $(".cross").click(function () {
-                $(".popup").fadeOut('fast')
-                now = ''
-            })
-        });
         ////////////////////////////////////////////////切換學年課表/////////////////////////////////////////////////////////////////////////////////////////////        
         $(function () {
             $('.arrow').click(function () {
@@ -57,7 +32,6 @@
                         tablewidth -= 1;
                     }
                     place--;
-                    console.log(place);
                 } else {
                     $(".strip").animate({
                         scrollLeft: '+=' + $(".numWrap").width()
@@ -66,7 +40,6 @@
                         tablewidth += 1;
                     }
                     place++;
-                    console.log(place);
                 }
             })
         });
@@ -81,14 +54,12 @@
                         scrollLeft: '-=' + $(".numWrap").width() * -1 * time
                     }, 400);
                     place = place - time
-                    console.log(place);
                 }
                 else {
                     $(".strip").animate({
                         scrollLeft: '+=' + $(".numWrap").width() * time
                     }, 400);
                     place = place + time
-                    console.log(place);
                 }
             })
         });
@@ -141,13 +112,12 @@
                     jsn(1);
                 }
             });
-            rr()
         }
         /////////////////////////////////////////////課表內動畫////////////////////////////////////////////////////////////////////////////////////////////////
         function mouseover(e) {
             let x = e.target.getAttribute("column")
             let y = e.target.getAttribute("row")
-            e.target.setAttribute("style", "background-color: #CFC3BC;");
+            e.target.setAttribute("style", "background-color: #D2D2D0");
         }
         function mouseout(e) {
             e.target.setAttribute("style", "background-color: '';");
@@ -167,31 +137,23 @@
         }
         //////////////////////////////////////////////////////課表提交///////////////////////////////////////////////////////////////////////////////////////
         function submit(x) {
-            x.setAttribute("disabled", "disabled")
             let sign = 0
             tr = x.id.split("j")
             let teacher
-            let classcode
             let tablewidth
-
+            let credit = 0
+            let field = 0
+            let subfield = 0
+            let classt = ""
+            let z = document.getElementById("sel").value
             let classname = document.getElementById("k" + tr[1] + "2").innerText
             let classtime = document.getElementById("k" + tr[1] + "6").innerText
-            if (!classtime.includes(",")) {
+            if (classtime.includes("B")) {
                 sign = 1
                 classtime = document.getElementById("k" + tr[1] + "5").innerText
             }
             classtime = classtime.split(",")
-            if (sign == 0) {
-                teacher = document.getElementById("k" + tr[1] + "8").innerText
-                classcode = document.getElementById("k" + tr[1] + "7").innerText
-            }
-            else {
-                teacher = document.getElementById("k" + tr[1] + "7").innerText
-                classcode = document.getElementById("k" + tr[1] + "6").innerText
-            }
-            let z = document.getElementById("sel").value
             if (z == "系內課程") {
-                let pop = document.getElementById("k" + tr[1] + "5").innerText
                 let y = document.getElementById("k" + tr[1] + "4").innerText
                 if (y.includes("1"))
                     tablewidth = 1
@@ -204,7 +166,28 @@
                 y = document.getElementById("k" + tr[1] + "0").innerText
                 if (y == "下學期")
                     tablewidth++
+            } else {
+                tablewidth = place
+            }
+            for (let i = 0; i < classtime.length; i++) {
+                let weeknum = parseInt(parseInt(classtime[i]) / 100);
+                let classnum = parseInt(parseInt(classtime[i]) % 100);
+                classt += (String(tablewidth - 1) + String(classnum) + String(weeknum))
+                if (i != classtime.length - 1)
+                    classt += ","
+                if (document.getElementById(String(tablewidth - 1) + String(classnum) + String(weeknum)).innerHTML) {
+                    alert("該時段已有選課")
+                    return;
+                }
+            }
+            if (sign == 0) {
+                teacher = document.getElementById("k" + tr[1] + "8").innerText
+            } else {
+                teacher = document.getElementById("k" + tr[1] + "7").innerText
+            }
 
+            if (z == "系內課程") {
+                let pop = document.getElementById("k" + tr[1] + "5").innerText
                 if (pop.includes("選修")) {
                     let n = document.getElementById("k" + tr[1] + "3").innerText
                     let k = document.getElementById("chtwo").innerText
@@ -212,11 +195,15 @@
                     let c = document.getElementById("selectedoptional").innerText
                     c = parseInt(c) + parseInt(n)
                     document.getElementById("selectedoptional").innerHTML = c
+                    credit = n;
+                    field = "selectedoptional";
+                    subfield = "chtwo";
                 }
                 else {
                     for (let i = 0; i < gen.length; i++) {
                         if (gent[i] == classname) {
                             let r = document.getElementById("cc" + i)
+                            field = "cc" + i
                             r.setAttribute("style", "color:white")
                             break
                         }
@@ -227,15 +214,16 @@
                 let c = document.getElementById("selectedPE").innerText
                 c++
                 document.getElementById("selectedPE").innerHTML = c
-                tablewidth = place
+                credit = 1;
+                field = "selectedPE";
             }
             else if (z == "語文課程") {
-                tablewidth = place
                 let pop = document.getElementById("k" + tr[1] + "4").innerText
                 if (pop.includes("必修")) {
                     for (let i = 0; i < gen.length; i++) {
                         if (gent[i] == classname) {
                             let r = document.getElementById("cc" + i)
+                            field = "cc" + i
                             r.setAttribute("style", "color:white")
                             break
                         }
@@ -248,16 +236,19 @@
                         j = document.getElementById("selectedoptional").innerText
                         document.getElementById("selectedoptional").innerHTML = parseInt(j) + 2
                         document.getElementById("chone").innerHTML = parseInt(k) + 2
+                        credit = 2;
+                        field = "selectedoptional";
+                        subfield = "chone";
                     }
                 }
             }
             else if (z == "英文課程") {
-                tablewidth = place
                 let pop = document.getElementById("k" + tr[1] + "4").innerText
                 if (pop.includes("必修")) {
                     for (let i = 0; i < gen.length; i++) {
                         if (gent[i] == classname) {
                             let r = document.getElementById("cc" + i)
+                            field = "cc" + i
                             r.setAttribute("style", "color:white")
                             break
                         }
@@ -270,16 +261,19 @@
                         j = document.getElementById("selectedoptional").innerText
                         document.getElementById("selectedoptional").innerHTML = parseInt(j) + 2
                         document.getElementById("chone").innerHTML = parseInt(k) + 2
+                        credit = 2;
+                        field = "selectedoptional";
+                        subfield = "chone";
                     }
                 }
             }
             else {
-                tablewidth = place
                 let pop = document.getElementById("k" + tr[1] + "5").innerText
                 if (pop.includes("必修")) {
                     for (let i = 0; i < gen.length; i++) {
                         if (gent[i] == classname) {
                             let r = document.getElementById("cc" + i)
+                            field = "cc" + i
                             r.setAttribute("style", "color:white")
                             break
                         }
@@ -289,100 +283,79 @@
                     let y = document.getElementById("k" + tr[1] + "9").innerText
                     if (y.includes("人格")) {
                         j = document.getElementById("fieldone")
+                        subfield = "fieldone";
                     } else if (y.includes("民主")) {
                         j = document.getElementById("fieldtwo")
+                        subfield = "fieldtwo";
                     } else if (y.includes("全球")) {
                         j = document.getElementById("fieldthree")
+                        subfield = "fieldthree";
                     } else if (y.includes("經典")) {
                         j = document.getElementById("fieldfour")
+                        subfield = "fieldfour";
                     } else if (y.includes("美學")) {
                         j = document.getElementById("fieldfive")
+                        subfield = "fieldfive";
                     } else if (y.includes("科技")) {
                         j = document.getElementById("fieldsix")
+                        subfield = "fieldsix";
                     } else if (y.includes("自然")) {
                         j = document.getElementById("fieldseven")
+                        subfield = "fieldseven";
                     } else if (y.includes("歷史")) {
                         j = document.getElementById("fieldeight")
+                        subfield = "fieldeight";
                     }
+                    let n = document.getElementById("k" + tr[1] + "3").innerText
                     let k = j.innerText
-                    if (k == '4') {
+                    if (parseInt(k) + parseInt(n) > 4) {
                         alert("該領域已超過四學分, 不納入有效學分")
                     } else {
-                        j.innerHTML = parseInt(k) + 2
-                        document.getElementById("selectedgeneral").innerText = parseInt(k) + 2
-
+                        j.innerHTML = parseInt(k) + parseInt(n)
+                        k = document.getElementById("selectedgeneral").innerText
+                        document.getElementById("selectedgeneral").innerText = parseInt(k) + parseInt(n)
+                        credit = 2;
+                        field = "selectedgeneral";
                     }
                 }
             }
-            //////////////////////////////////////////////提交按鈕填入課表///////////////////////////////////////////////////////////////////////////////////////////////
-            let timelength = classtime.length;
-            let Id;
-            for (let time = 0; time < timelength; time++) {
+            for (let time = 0; time < classtime.length; time++) {
+                let z = document.createElement("button");
+                z.setAttribute("class", "clablo")
+                z.setAttribute("data-credit", credit)
+                z.setAttribute("data-field", field)
+                z.setAttribute("data-subfield", subfield)
+                z.setAttribute("data-classt", classt)
+                z.setAttribute("onclick", "delclas(this)")
+                z.innerHTML = classname + "<br>" + teacher
                 let weeknum = parseInt(parseInt(classtime[time]) / 100);
                 let classnum = parseInt(parseInt(classtime[time]) % 100);
-                console.log(String(tablewidth - 1) + String(classnum) + String(weeknum))
-                document.getElementById(String(tablewidth - 1) + String(classnum) + String(weeknum)).innerHTML = `<p>${classname}<br>${classcode}<br>${teacher}</p>`;
-                Id = String(tablewidth - 1) + String(classnum) + String(weeknum);
+                document.getElementById(String(tablewidth - 1) + String(classnum) + String(weeknum)).appendChild(z);
             }
-            //////////////////////////////////////////////儲存到sheet///////////////////////////////////////////////////////////////////////////////////////////////
-            let accName = "hteee";
-            $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
-                data: {
-                    "name": accName,
-                    "classid": Id,
-                    "classname": classname,
-                    "classcode": classcode,
-                    "teacher": teacher
-                },
-                success: function (response) {
-                    if (response == "成功") {
-                        console.log("submit success");
-                    }
-                },
-            });
         }
-        //////////////////////////////////////////////載入sheet///////////////////////////////////////////////////////////////////////////////////////////////
-        function rr() {
-            const sheetID = "15r0AFxcQbOX5zyWDzfEhm9SDMrgemF_DUGoeY7F19YU"; // 試算表代號
-            const gid = "0"; // 工作表代號
-            let sql = encodeURI("select *"); // SQL 語法，目前是設定"F>300"才會撈出來
-            let callback = "display"; // 回呼函數名稱
-            let url = "https://spreadsheets.google.com/tq?tqx=responseHandler:" + callback + "&tq=" + sql + "&key=" + sheetID + "&gid=" + gid;
-            //console.log(url);
+        //////////////////////////////////////////////刪除課程///////////////////////////////////////////////////////////////////////////////////////////////
+        function delclas(x) {
+            let classt = x.getAttribute("data-classt")
+            let classtime = classt.split(",")
 
-            $.getScript(url); //取回Google Spreadsheet API回傳之JS code並執行
-
-        };
-
-        function display(resultJson) {
-
-            console.log(resultJson); //印出回傳結果，可仔細觀察一下Google試算表回傳之JSON內容
-            let rowArray = resultJson.table.rows;
-            let rowLength = rowArray.length;
-            let dataGroup
-            let dataLength
-            let htmlContent = "";
-
-            for (let i = 0; i < rowLength; i++) {
-
-                dataGroup = rowArray[i].c;
-                dataLength = dataGroup.length;
-                htmlContent += "<p>";
-
-                for (let j = 2; j < 5; j++) {
-                    if (!dataGroup[j]) {
-                        htmlContent += "<br>";
-                        continue; //預防空的field
-                    }
-                    htmlContent += (dataGroup[j].f || dataGroup[j].v || " ") + "<br>"; //有f印f (field)，沒f印v (value)，不然印空字串
-                }//<p>${classname}<br>${classcode}<br>${teacher}</p> 上面的code跑迴圈的過程
-                htmlContent += "</p>";
+            for (let i = 0; i < classtime.length; i++)
+                document.getElementById(classtime[i]).innerText = ""
+            let field = x.getAttribute("data-field")
+            if (field.includes("cc")) {
+                let r = document.getElementById(field)
+                r.setAttribute("style", "color:")
             }
-            console.log(dataGroup[1].f || dataGroup[1].v || " ")
-            document.getElementById(String(dataGroup[1].f || dataGroup[1].v || " ")).innerHTML = htmlContent; //id內套用內容
-        };
-
+            else if (field != 0) {
+                let credit = x.getAttribute("data-credit")
+                let a = document.getElementById(x.getAttribute("data-field")).innerText
+                document.getElementById(x.getAttribute("data-field")).innerText = parseInt(a) - parseInt(credit)
+                let subfield = x.getAttribute("data-subfield")
+                if (subfield != 0) {
+                    let b = document.getElementById(x.getAttribute("data-subfield")).innerText
+                    document.getElementById(x.getAttribute("data-subfield")).innerText = parseInt(b) - parseInt(credit)
+                }
+            }
+        }
         //////////////////////////////////////////////課表清空///////////////////////////////////////////////////////////////////////////////////////////////
         $(function () {
             $("#clear").click(function () {
@@ -396,6 +369,16 @@
                 document.getElementById("selectedgeneral").innerText = 0
                 document.getElementById("selectedoptional").innerHTML = 0
                 document.getElementById("selectedPE").innerHTML = 0
+                document.getElementById("fieldone").innerHTML = 0
+                document.getElementById("fieldtwo").innerHTML = 0
+                document.getElementById("fieldthree").innerHTML = 0
+                document.getElementById("fieldfour").innerHTML = 0
+                document.getElementById("fieldfive").innerHTML = 0
+                document.getElementById("fieldsix").innerHTML = 0
+                document.getElementById("fieldseven").innerHTML = 0
+                document.getElementById("fieldeight").innerHTML = 0
+                document.getElementById("chone").innerHTML = 0
+                document.getElementById("chtwo").innerHTML = 0
                 let aaa = document.getElementById("reqc");
                 aaa.innerHTML = ""
                 start()
@@ -542,59 +525,94 @@
 
 <body>
     <!------------------------------彈出視窗-------------------------------------->
-    <div class="grouppop">
-        <div id="requiredcourse" class="popup">
-            <h2 class="field">尚未獲得的必修學分清單</h2>
-            <span class="cross">X</span>
-            <div class="requiredclass" id="reqc">
-
-            </div>
-        </div>
-        <div id="optionalcourse" class="popup">
-            <h2 class="field">選修
-            </h2>
-            <span class="cross">X</span>
-            <div class="optionalclass">
-                <div class="type">共同教育中心(<span id="chone">0</span>/8)</div>
-                <div class="type">系內選修(<span id="chtwo">0</span>/46)</div>
-            </div>
-
-        </div>
-        <div id="generalcourse" class="popup">
-            <h2 class="field">博雅八大領域</h2>
-            <span class="cross">X</span>
-            <div class="eightfield">
-                <div class="subfield">
-                    <div class="type">人格(<span id="fieldone">0</span>/4)</div>
+    <!-- Modal -->
+    <div class="modal fade" id="reqModal" tabindex="-1" aria-labelledby="reqModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background-color:#D6DCDB;">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-2" id="reqModalLabel" style="color:#66828E;">必修學分清單</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="subfield">
-                    <div class="type">民主(<span id="fieldtwo">0</span>/4)</div>
+                <div class="modal-body fs-4" id="reqc" style="color:#66828E;">
                 </div>
-                <div class="subfield">
-                    <div class="type">全球(<span id="fieldthree">0</span>/4)</div>
-                </div>
-                <div class="subfield">
-                    <div class="type">經典(<span id="fieldfour">0</span>/4)</div>
-                </div>
-                <div class="subfield">
-                    <div class="type">美學(<span id="fieldfive">0</span>/4)</div>
-                </div>
-                <div class="subfield">
-                    <div class="type">科技(<span id="fieldsix">0</span>/4)</div>
-                </div>
-                <div class="subfield">
-                    <div class="type">自然(<span id="fieldseven">0</span>/4)</div>
-                </div>
-                <div class="subfield">
-                    <div class="type">歷史(<span id="fieldeight">0</span>/4)</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-    <!------------------------------個人資料-------------------------------------->
-    <div style="display: flex;" class="up">
-        <div class="card">
-
+    <div class="modal fade" id="opModal" tabindex="-1" aria-labelledby="opModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color:#D6DCDB;">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-2" id="opModalLabel" style="color:#66828E;">選修</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="color:#66828E;">
+                    <div class="fs-3">共同教育中心(<span id="chone">0</span>/8)</div>
+                    <div class="fs-3">系內選修(<span id="chtwo">0</span>/46)</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="genModal" tabindex="-1" aria-labelledby="genModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background-color:#D6DCDB;">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-2" id="genModalLabel" style="color:#66828E;">博雅八大領域</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="color:#66828E;">
+                    <div class="container d-flex flex-row">
+                        <div class="row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">人格(<span id="fieldone">0</span>/4)
+                            </div>
+                        </div>
+                        <div class="row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">民主(<span id="fieldtwo">0</span>/4)</div>
+                        </div>
+                        <div class="row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">全球(<span id="fieldthree">0</span>/4)</div>
+                        </div>
+                        <div class="row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">經典(<span id="fieldfour">0</span>/4)</div>
+                        </div>
+                    </div>
+                    <div class="container d-flex flex-row">
+                        <div class="row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">美學(<span id="fieldfive">0</span>/4)</div>
+                        </div>
+                        <div class="row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">科技(<span id="fieldsix">0</span>/4)</div>
+                        </div>
+                        <div class="row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">自然(<span id="fieldseven">0</span>/4)</div>
+                        </div>
+                        <div class=" row align-items-center border border-3 rounded m-2 border-secondary"
+                            style="width:100px;height:100px;">
+                            <div class="fs-4">歷史(<span id="fieldeight">0</span>/4)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="up">
+        <!------------------------------個人資料-------------------------------------->
+        <div class="card al" style="height:auto; width:10vw;">
             <h5 class="card-title">NAME</h5>
             <h6 class="card-subtitle mb-2 text-muted">資訊工程系X年級X班</h6>
             <div class="logd"><input class="logout" type="button" value="登出"></div>
@@ -627,28 +645,28 @@
                     <input type="radio" class="btn-check" name="btnradio" id="SEM8" autocomplete="off">
                     <label class="btn btn-outline-secondary" for="SEM8">大四下</label>
                 </div>
-                <input id="clear" type="button" value="清空課表">
             </div>
         </div>
         <!------------------------------學分-------------------------------------->
         <div class="typesetting">
             <div class="group">
-                <div class="credit" id="required">
+                <div class="credit" id="required" data-bs-toggle="modal" data-bs-target="#reqModal">
                     <div class="type">必修</div>
                 </div>
                 <div class="credit" id="PE">
                     <div class="type"> 體育<br>(<span id="selectedPE">0</span>/4)</div>
                 </div>
-                <div class="credit" id="general">
+                <div class="credit" id="general" data-bs-toggle="modal" data-bs-target="#genModal">
                     <div class="type">通識學分<br>(<span id="selectedgeneral">0</span>/14)</div>
                 </div>
-                <div class="credit" id="optional">
+                <div class="credit" id="optional" data-bs-toggle="modal" data-bs-target="#opModal">
                     <div class="type">選修學分<br>(<span id="selectedoptional">0</span>/54)</div>
                 </div>
             </div>
         </div>
     </div>
     <!--------------------------------------------課程篩選-------------------------------------->
+
     <div class="lefbot">
         <div class="selgroup">
             <div class="lefbot_in">
@@ -683,7 +701,9 @@
                 <label><span class="searword">課程搜尋</span>
                     <input id="myInput" class="search"></label>
             </div>
-
+            <div class="clear">
+                <input id="clear" type="button" value="清空課表">
+            </div>
         </div>
 
         <div class="database">

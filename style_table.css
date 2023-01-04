@@ -8,6 +8,7 @@ body {
 .up {
     position: absolute;
     width: 100%;
+    float: left;
 }
 
 .logd {
@@ -31,22 +32,26 @@ body {
     background-color: #D0DCDD;
 }
 
+.clear {
+    position: relative;
+    top: 0px;
+}
 
 /*****************************學年***********************************/
 .semester {
-    width: 40vw;
+    width: 45vw;
     height: 25vh;
     position: relative;
-    left: 5px;
+    float: left;
 }
 
 .sem_in {
-    right: 0px;
-    width: 100%;
-    height: 40%;
+    width: 85%;
+    height: 50%;
     position: relative;
     top: 50%;
-    transform: translate(0, -50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 
@@ -124,7 +129,7 @@ select {
     position: relative;
     bottom: 0px;
     margin: 20px;
-    height: 90%;
+    height: 85%;
     width: 100%;
 }
 
@@ -140,7 +145,7 @@ select {
     font-family: 'cwTeXYen';
     position: absolute;
     width: 20vw;
-    height: 75vh;
+    height: 80vh;
     bottom: 15px;
 }
 
@@ -152,13 +157,25 @@ select {
 
 .selgroup {
     position: relative;
-    height: 10%;
+    height: 15%;
     width: 100%;
     left: 10px;
     float: left;
 }
 
 /***************課表********************/
+.clablo {
+    position: relative;
+    border-radius: 10px;
+    box-sizing: border-box;
+    height: 80px;
+    width: calc(75vw*0.8/8);
+    text-align: center;
+    white-space: pre-wrap;
+    border-color: #BECBD3;
+    overflow: hidden;
+    background-color: #DCDDDF;
+}
 
 .wrapper {
     position: absolute;
@@ -232,17 +249,10 @@ select {
     color: #D3BBB7;
 }
 
-.subfield {
-    height: 100px;
-    width: 100px;
-    border: 3px;
-    border-style: solid;
-    border-color: #D3BBB7;
-    color: #8D6B61;
+.al {
     float: left;
-    margin: 20px;
-    font-size: 30px;
 }
+
 
 .requiredclass {
     font-size: 25px;
@@ -255,37 +265,6 @@ select {
     line-height: 150px;
 }
 
-.cross {
-    position: relative;
-    top: -50px;
-    right: -400px;
-    cursor: pointer;
-    font-size: 30px;
-    color: #9297AB;
-}
-
-.grouppop {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-}
-
-.popup {
-    box-sizing: border-box;
-    background-color: #E6DEDC;
-    border: 3px;
-    border-style: solid;
-    border-color: #D3BBB7;
-    padding-left: 150px;
-    padding-right: 150px;
-    display: none;
-    width: 900px;
-    height: 500px;
-    text-align: center;
-    font-family: 'cwTeXYen';
-}
 
 .type {
     position: relative;
