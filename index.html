@@ -112,6 +112,21 @@
                     jsn(1);
                 }
             });
+            $.ajax({
+                    url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
+                    data: {
+                        "name": "---",
+                        "classid": "---",
+                        "classname": "---start---",
+                        "teacher": "---",
+                        "classtime": "---",
+                    },
+                    success: function(response) {
+                        if(response == "成功"){
+                            console.log("start success");
+                        }
+                    },
+                });
         }
         /////////////////////////////////////////////課表內動畫////////////////////////////////////////////////////////////////////////////////////////////////
         function mouseover(e) {
@@ -149,6 +164,7 @@
             let z = document.getElementById("sel").value
             let classname = document.getElementById("k" + tr[1] + "2").innerText
             let classtime = document.getElementById("k" + tr[1] + "6").innerText
+            let available = 0;
             if (classtime.includes("B")) {
                 sign = 1
                 classtime = document.getElementById("k" + tr[1] + "5").innerText
@@ -178,6 +194,7 @@
                     classt += ","
                 if (document.getElementById(String(tablewidth - 1) + String(classnum) + String(weeknum)).innerHTML) {
                     alert("該時段已有選課")
+                    available = 1;
                     return;
                 }
             }
@@ -329,29 +346,36 @@
                 z.setAttribute("data-subfield", subfield)
                 z.setAttribute("data-classt", classt)
                 z.setAttribute("onclick", "delclas(this)")
-                z.innerHTML = classname + "<br>" + teacher
+                z.innerHTML = classname + ",<br>" + teacher
                 let weeknum = parseInt(parseInt(classtime[time]) / 100);
                 let classnum = parseInt(parseInt(classtime[time]) % 100);
                 classId = String(tablewidth - 1) + String(classnum) + String(weeknum);
                 document.getElementById(classId).appendChild(z);
+                
             }
           //////////////////////////////////////////////儲存到sheet///////////////////////////////////////////////////////////////////////////////////////////////
             let accName = "Auth::user()->name";
-            $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
-                data: {
-                    "name": accName,
-                    "classid": classId,
-                    "classname": classname,
-                    "teacher": teacher,
-                    "classtime": `${classtime[0]},${classtime[1]},${classtime[2]}`
-                },
-                success: function(response) {
-                    if(response == "成功"){
-                        console.log("submit success");
-                    }
-                },
-            });
+            if(available==0){
+                $.ajax({
+                    url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
+                    data: {
+                        "name": accName,
+                        "classid": classId,
+                        "classname": classname,
+                        "teacher": teacher,
+                        "classtime": `${classtime[0]},${classtime[1]},${classtime[2]}`
+                    },
+                    success: function(response) {
+                        if(response == "成功"){
+                            console.log("submit success");
+                        }
+                    },
+                });
+            }
+            else{
+                available = 0;
+            }
+            
         }
   //////////////////////////////////////////////載入sheet///////////////////////////////////////////////////////////////////////////////////////////////
         $(document).ready(function () {
@@ -397,7 +421,7 @@
         function delclas(x) {
             let classt = x.getAttribute("data-classt")
             let classtime = classt.split(",")
-
+            let classname = document.getElementById(classtime[0]).innerText.split(",")[0]
             for (let i = 0; i < classtime.length; i++)
                 document.getElementById(classtime[i]).innerText = ""
             let field = x.getAttribute("data-field")
@@ -415,7 +439,44 @@
                     document.getElementById(x.getAttribute("data-subfield")).innerText = parseInt(b) - parseInt(credit)
                 }
             }
+            let accName = "delete";
+            $.ajax({
+                url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
+                data: {
+                    "name": "delete",
+                    "classid": "---",
+                    "classname": `---${classname}---`,
+                    "teacher": "---",
+                    "classtime": "---"
+                },
+                success: function(response) {
+                    if(response == "成功"){
+                        console.log("delete success");
+                    }
+                },
+            });
         }
+        //////////////////////////////////////////////課表總儲存///////////////////////////////////////////////////////////////////////////////////////////////
+        $(function () {
+            $("#save").click(function () {
+                $.ajax({
+                    url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
+                    data: {
+                        "name": "---",
+                        "classid": "---",
+                        "classname": "---store---",
+                        "teacher": "---",
+                        "classtime": "---"
+                    },
+                    success: function(response) {
+                        if(response == "成功"){
+                            console.log("save success");
+                        }
+                    },
+                });
+            })
+        });
+
         //////////////////////////////////////////////課表清空///////////////////////////////////////////////////////////////////////////////////////////////
         $(function () {
             $("#clear").click(function () {
@@ -441,6 +502,21 @@
                 document.getElementById("chtwo").innerHTML = 0
                 let aaa = document.getElementById("reqc");
                 aaa.innerHTML = ""
+                $.ajax({
+                url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
+                data: {
+                    "name": "---",
+                    "classid": "---",
+                    "classname": "---ALLclear---",
+                    "teacher": "---",
+                    "classtime": "---"
+                },
+                success: function(response) {
+                    if(response == "成功"){
+                        console.log("clear success");
+                    }
+                },
+            });
                 start()
             })
         });
@@ -764,6 +840,7 @@
             </div>
             <div class="clear">
                 <input id="clear" type="button" value="清空課表">
+                <input id="save" type="button" value="儲存課表">
             </div>
         </div>
 
