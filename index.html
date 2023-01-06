@@ -145,6 +145,7 @@
             let field = 0
             let subfield = 0
             let classt = ""
+            let classId, classcode;
             let z = document.getElementById("sel").value
             let classname = document.getElementById("k" + tr[1] + "2").innerText
             let classtime = document.getElementById("k" + tr[1] + "6").innerText
@@ -319,6 +320,7 @@
                     }
                 }
             }
+            
             for (let time = 0; time < classtime.length; time++) {
                 let z = document.createElement("button");
                 z.setAttribute("class", "clablo")
@@ -330,17 +332,17 @@
                 z.innerHTML = classname + "<br>" + teacher
                 let weeknum = parseInt(parseInt(classtime[time]) / 100);
                 let classnum = parseInt(parseInt(classtime[time]) % 100);
-                document.getElementById(String(tablewidth - 1) + String(classnum) + String(weeknum)).appendChild(z);
+                classId = String(tablewidth - 1) + String(classnum) + String(weeknum);
+                document.getElementById(classId).appendChild(z);
             }
           //////////////////////////////////////////////儲存到sheet///////////////////////////////////////////////////////////////////////////////////////////////
-          let accName = "Auth::user()->name";
+            let accName = "Auth::user()->name";
             $.ajax({
                 url: "https://script.google.com/macros/s/AKfycbyVV8p0nA0owNei9-2lyoIkRchTFSd7F4uzu4x2_8q3PJ9GeOd0-dPBZYJyqbjOK3uewQ/exec",
                 data: {
                     "name": accName,
-                    "classid": Id,
+                    "classid": classId,
                     "classname": classname,
-                    "classcode": classcode,
                     "teacher": teacher,
                     "classtime": `${classtime[0]},${classtime[1]},${classtime[2]}`
                 },
@@ -354,7 +356,7 @@
   //////////////////////////////////////////////載入sheet///////////////////////////////////////////////////////////////////////////////////////////////
         $(document).ready(function () {
             const sheetID = "15r0AFxcQbOX5zyWDzfEhm9SDMrgemF_DUGoeY7F19YU"; // 試算表代號
-            const gid = "0"; // 工作表代號
+            const gid = "1"; // 工作表代號
             let sql = encodeURI("select *"); // SQL 語法，目前是設定"F>300"才會撈出來
             let callback = "display"; // 回呼函數名稱
             let url = "https://spreadsheets.google.com/tq?tqx=responseHandler:" + callback + "&tq=" + sql + "&key=" + sheetID + "&gid=" + gid;
