@@ -106,6 +106,7 @@ select {
     height: 20px;
 }
 
+#save,
 #clear {
     position: relative;
     width: 150px;
